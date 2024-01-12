@@ -1,0 +1,20 @@
+[
+    {
+        "title": "All Butter Shortbread Sandwich Cookies wth Raspberry Filling", 
+        "description": "bla bla bla",
+        "image": "https://www.traderjoes.com/content/dam/trjo/products/m21002/73609.png/jcr:content/renditions/webp-1280.webp",
+        "ingredients": "ingredient list",
+        "price": 2.99,
+        "diets": [],
+        "id": "All Butter Shortbread Sandwich Cookies wth Raspberry Filling"
+    },
+    {
+        "title": "Chocolate Almond Biscotti", 
+        "description": "bla bla bla",
+        "image": "https://www.traderjoes.com/content/dam/trjo/context-images/03575-choc-almond-biscotti-pdp.jpg/jcr:content/renditions/webp-1280.webp",
+        "ingredients": "ingredient list",
+        "price": 4.79,
+        "diets": ["kosher"],
+        "id": "Chocolate Almond Biscotti"
+    }
+]
