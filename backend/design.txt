@@ -1,0 +1,27 @@
+User
+- userID: Int
+- email: String
+- username: String
+- password: String
+- session_token: String
+- session_expiration: Datetime
+- update_token: String
+
+Product
+- name: String
+- ingredients: String
+- description: String
+- price: Double
+- kosher: Bool
+- dairy_free: Bool
+- gluten_free: Bool 
+- vegan: Bool
+- organic: Bool
+- weight_oz: Double
+- category: String
+- picture: LargeBinary
+
+Cart
+- userID: Int (primary key, foreign key)
+- productID: Int (primary key, foreign key)
+- quantity: Int

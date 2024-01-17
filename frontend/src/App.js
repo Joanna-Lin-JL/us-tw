@@ -1,0 +1,19 @@
+import './App.css';
+
+// import Link from 'next/link';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import HomePage from "./pages/HomePage"
+import CartPage from "./pages/CartPage"
+
+
+function App() {
+  <Router>
+    <Switch>
+      <Route exact path="/" component={HomePage}/>
+      <Route path="/cart" component={CartPage}/>
+    </Switch>
+  </Router>
+}
+
+export default App;

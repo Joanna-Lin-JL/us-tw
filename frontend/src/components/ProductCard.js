@@ -7,7 +7,7 @@ const ProductCard = ({product, addToCart, changeCartQuantity, getCartQuantity, c
     const plusID = "plusButton" + product.id;
     const quantityID = "quantity" + product.id;
 
-    var prodQuantity = getCartQuantity(product)===undefined? 0: getCartQuantity(product);
+    var prodQuantity = getCartQuantity(product)
 
     function clickAddToCart() {
         document.getElementById(addToCartID).setAttribute("hidden", "hidden");
