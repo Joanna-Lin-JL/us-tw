@@ -44,13 +44,13 @@ def extract_token(request):
     return True, bearer_token
 
 ################ Greeting routes ################
-@app.route("/")
+@app.route("/api/")
 def greeting():
     """Endpoint for greeting user by reading from .env file"""
     return "Welcome"
 
 ### authentication routes ###
-@app.route("/register/", methods=["POST"])
+@app.route("/api/register/", methods=["POST"])
 def register_account():
     """
     Endpoint for registering a new session
@@ -78,7 +78,7 @@ def register_account():
     return success_response(user.serialize(), 201)
 
 
-@app.route("/login/", methods=["POST"])
+@app.route("/api/login/", methods=["POST"])
 def login():
     """
     Endpoint for logging in
@@ -108,7 +108,7 @@ def login():
     })
 
 
-@app.route("/session/", methods=["POST"])
+@app.route("/api/session/", methods=["POST"])
 def update_session():
     """
     Endpoint for updating a user's session
@@ -132,7 +132,7 @@ def update_session():
     })
 
 
-@app.route("/logout/", methods=["POST"])
+@app.route("/api/logout/", methods=["POST"])
 def logout():
     """
     Endpoint for logging out
@@ -155,7 +155,7 @@ def logout():
 
 
 ### user routes ###
-@app.route("/user/", methods=["GET"])
+@app.route("/api/user/", methods=["GET"])
 def get_user():
     success, session_token = extract_token(request)
 
@@ -168,7 +168,7 @@ def get_user():
 
     return success_response(user.serialize())
 
-@app.route("/user/", methods=['DELETE'])
+@app.route("/api/user/", methods=['DELETE'])
 def delete_user():
     """Endpoint to delete a user by id with verified credentials"""
     success, session_token = extract_token(request)
@@ -184,7 +184,7 @@ def delete_user():
     db.session.commit()
     return success_response(user.serialize())
 
-@app.route("/user/username/", methods=["PUT"])
+@app.route("/api/user/username/", methods=["PUT"])
 def update_username():
     success, session_token = extract_token(request)
 
@@ -203,7 +203,7 @@ def update_username():
 
 
 ### product cart interactions ###
-@app.route("/user/cart/all/", methods=["GET"])
+@app.route("/api/user/cart/all/", methods=["GET"])
 def get_all_cart():
     success, session_token = extract_token(request)
 
@@ -216,8 +216,8 @@ def get_all_cart():
 
     return success_response([d.serialize() for d in user.cart_items], 400)
 
-@app.route("/user/cart/<int:cart_id>/", methods=["GET"])
-def get_cart():
+@app.route("/api/user/cart/<int:cart_id>/", methods=["GET"])
+def get_cart(cart_id):
     success, session_token = extract_token(request)
 
     if not success:
@@ -227,10 +227,13 @@ def get_cart():
     if user is None or not user.verify_session_token(session_token):
         return failure_response("Invalid session token", 400)
     
+    item = Cart.query.filter_by(cartID=cart_id).first()
+    if item is None: 
+        return failure_response("item not found in cart!")
     
-    
+    return success_response(item.serialize())
 
-@app.route("/user/cart/<int:product_id>/", methods=["POST"])
+@app.route("/api/user/cart/<int:product_id>/", methods=["POST"])
 def add_user_cart(product_id):
     success, session_token = extract_token(request)
 
@@ -258,7 +261,7 @@ def add_user_cart(product_id):
 
     return success_response(user.serialize())
 
-@app.route("/user/cart/<int:cart_id>/quantity/", methods=["PUT"])
+@app.route("/api/user/cart/<int:cart_id>/quantity/", methods=["PUT"])
 def change_quantity(cart_id):
     """
     Change quantity of an item in cart by `quantity` amout
@@ -288,11 +291,11 @@ def change_quantity(cart_id):
 
 
 ### product routes ###
-@app.route("/products/", methods=["GET"])
+@app.route("/api/products/", methods=["GET"])
 def get_all_products():
-    return success_response({"drinks": [c.serialize() for c in Product.query.all()]})
+    return success_response({"products": [c.serialize() for c in Product.query.all()]})
 
-@app.route("/products/<int:prod_id>/", methods=["GET"])
+@app.route("/api/products/<int:prod_id>/", methods=["GET"])
 def get_product(prod_id):
     product = Product.query.get(prod_id).first()
 
@@ -301,7 +304,7 @@ def get_product(prod_id):
     else: 
         return success_response(product.serialize())
     
-@app.route("/products/", methods=["POST"])
+@app.route("/api/products/", methods=["POST"])
 def add_product():
     body = json.loads(request.data)
 
@@ -324,7 +327,7 @@ def add_product():
     db.session.commit()
     return success_response(new_product.serialize(), 201)
 
-@app.route("/products/<int:product_id>/", methods=["PUT"])
+@app.route("/api/products/<int:product_id>/", methods=["PUT"])
 def update_product(product_id): 
     body = json.loads(request.data)
 
@@ -344,10 +347,10 @@ def update_product(product_id):
     return success_response(product.serialize())
 
 ### Endpoints for testing ###
-@app.route("/user/all/", methods=["GET"])
+@app.route("/api/user/all/", methods=["GET"])
 def get_all_user():
     return [c.serialize() for c in User.query.all()]
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=8000, debug=True)
+    app.run(host="localhost", port=5000, debug=True)
